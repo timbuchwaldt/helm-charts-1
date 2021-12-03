@@ -59,6 +59,9 @@ spec:
       {{- end }}
       initContainers:
       - name: wait-for-manager
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         image: {{ .Values.scheduler.initContainer.image }}:{{ .Values.scheduler.initContainer.tag  }}
         imagePullPolicy: {{ .Values.scheduler.initContainer.pullPolicy }}
         {{- if .Values.manager.enable }}
@@ -68,6 +71,9 @@ spec:
         {{- end }}
       containers:
       - name: scheduler
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         image: "{{ .Values.scheduler.image }}:{{ .Values.scheduler.tag }}"
         imagePullPolicy: {{ .Values.scheduler.pullPolicy | quote }}
         resources:
