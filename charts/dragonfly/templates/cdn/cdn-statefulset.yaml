@@ -59,6 +59,9 @@ spec:
       {{- end }}
       initContainers:
       - name: wait-for-manager
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 100
         image: {{ .Values.cdn.initContainer.image }}:{{ .Values.cdn.initContainer.tag  }}
         imagePullPolicy: {{ .Values.cdn.initContainer.pullPolicy }}
         {{- if .Values.manager.enable }}
@@ -68,6 +71,12 @@ spec:
         {{- end }}
       containers:
       - name: cdn
+        securityContext:
+          runAsUser: 100
+          runAsGroup: 101
+        env:
+          - name: USER
+            value: nobody
         image: "{{ .Values.cdn.image }}:{{ .Values.cdn.tag }}"
         imagePullPolicy: {{ .Values.cdn.pullPolicy | quote }}
         resources:
