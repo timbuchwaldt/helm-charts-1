@@ -60,12 +60,18 @@ spec:
       initContainers:
       {{- if .Values.redis.enable }}
       - name: wait-for-redis
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         image: {{ .Values.manager.initContainer.image }}:{{ .Values.manager.initContainer.tag  }}
         imagePullPolicy: {{ .Values.manager.initContainer.pullPolicy }}
         command: ['sh', '-c', 'until nslookup {{ .Release.Name }}-{{ default "redis" .Values.redis.fullname }}-master.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }} && nc -vz {{ .Release.Name }}-{{ default "redis" .Values.redis.fullname }}-master.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }} {{ .Values.redis.service.port }}; do echo waiting for redis; sleep 2; done;']
       {{- end }}
       {{- if .Values.mysql.enable }}
       - name: wait-for-mysql
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         image: {{ .Values.manager.initContainer.image }}:{{ .Values.manager.initContainer.tag  }}
         imagePullPolicy: {{ .Values.manager.initContainer.pullPolicy }}
         command: ['sh', '-c', 'until nslookup {{ .Release.Name }}-{{ default "mysql" .Values.mysql.fullname }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }} && nc -vz {{ .Release.Name }}-{{ default "mysql" .Values.mysql.fullname }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }} {{ .Values.mysql.primary.service.port }}; do echo waiting for mysql; sleep 2; done;']
@@ -73,6 +79,9 @@ spec:
       {{- end }}
       containers:
       - name: manager
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         image: "{{ .Values.manager.image }}:{{ .Values.manager.tag }}"
         imagePullPolicy: {{ .Values.manager.pullPolicy | quote }}
         resources:
