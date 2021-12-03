@@ -80,8 +80,8 @@ spec:
       containers:
       - name: manager
         securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
+          runAsUser: 100
+          runAsGroup: 101
         env:
           - name: USER
             value: nobody
