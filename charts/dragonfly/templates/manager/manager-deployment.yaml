@@ -84,7 +84,7 @@ spec:
           runAsGroup: 1000
         env:
           - name: USER
-            value: 1000
+            value: nobody
         image: "{{ .Values.manager.image }}:{{ .Values.manager.tag }}"
         imagePullPolicy: {{ .Values.manager.pullPolicy | quote }}
         resources:
